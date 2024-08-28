@@ -7,7 +7,7 @@ const Navbar = () => {
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            MyApp
+            TheManager
           </Link>
         </Typography>
         <Box>
