@@ -1,5 +1,4 @@
-// src/pages/Login.js
-import React, { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 
 const Login = () => {
@@ -8,11 +7,13 @@ const Login = () => {
     password: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission logic here
     console.log("Form Data:", formData);

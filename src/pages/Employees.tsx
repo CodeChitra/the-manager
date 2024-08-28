@@ -35,10 +35,7 @@ const Employees: React.FC = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
+  const handleChangePage = (_: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
