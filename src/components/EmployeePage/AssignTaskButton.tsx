@@ -11,7 +11,11 @@ const AssignTaskButton: React.FC = () => {
       <Button variant="contained" onClick={() => setModalOpen(true)}>
         Assign Task
       </Button>
-      <ModalWrapper open={isModalOpen} onClose={() => setModalOpen(false)}>
+      <ModalWrapper
+        title="New Task"
+        open={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      >
         <TaskForm onSubmit={() => setModalOpen(false)} />
       </ModalWrapper>
     </>

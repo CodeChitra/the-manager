@@ -1,7 +1,7 @@
 import { Box, TextField, Button } from "@mui/material";
 
 interface TaskFormProps {
-  onSubmit: (data: any) => void;
+  onSubmit: () => void;
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
@@ -10,7 +10,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit({}); // Replace with form data
+        onSubmit(); // Replace with form data
       }}
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >

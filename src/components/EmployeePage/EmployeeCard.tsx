@@ -1,7 +1,5 @@
-// src/components/EmployeePage/EmployeeCard.tsx
 import React, { useState } from "react";
 import {
-  Box,
   Typography,
   Button,
   Card,
@@ -48,6 +46,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
 
       {/* Update Modal */}
       <ModalWrapper
+        title="Update Employee Details"
         open={isUpdateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
       >

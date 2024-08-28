@@ -20,11 +20,14 @@ import {
 import ModalWrapper from "../components/ModalWrapper";
 import EmployeeForm from "../components/EmployeeForm";
 
+type SortFilterType = "experience" | "age";
+type SortOrderType = "asc" | "dsc";
 const Employees: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [sortField, setSortField] = React.useState("experience");
-  const [sortOrder, setSortOrder] = React.useState("asc");
+  const [sortField, setSortField] =
+    React.useState<SortFilterType>("experience");
+  const [sortOrder, setSortOrder] = React.useState<SortOrderType>("asc");
   const [filterLocation, setFilterLocation] = React.useState("");
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 10;
@@ -149,7 +152,10 @@ const Employees: React.FC = () => {
     .filter((emp) => emp.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
       const sortValue = sortOrder === "asc" ? 1 : -1;
-      return a[sortField] > b[sortField] ? sortValue : -sortValue;
+      if (sortField in a && sortField in b) {
+        return a[sortField] > b[sortField] ? sortValue : -sortValue;
+      }
+      return 0;
     });
 
   // Paginate employees
@@ -187,7 +193,7 @@ const Employees: React.FC = () => {
             <InputLabel>Sort By</InputLabel>
             <Select
               value={sortField}
-              onChange={(e) => setSortField(e.target.value as string)}
+              onChange={(e) => setSortField(e.target.value as SortFilterType)}
               label="Sort By"
             >
               <MenuItem value="experience">Experience</MenuItem>
@@ -198,7 +204,7 @@ const Employees: React.FC = () => {
             <InputLabel>Order</InputLabel>
             <Select
               value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as string)}
+              onChange={(e) => setSortOrder(e.target.value as SortOrderType)}
               label="Order"
             >
               <MenuItem value="asc">Ascending</MenuItem>
