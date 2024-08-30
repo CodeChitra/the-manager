@@ -14,12 +14,14 @@ const TaskLists: React.FC<TaskListsProps> = ({ type }) => {
             name: "Task 1",
             description: "Description of task 1",
             estimatedTime: 2,
+            completed: false,
           },
           {
             id: 2,
             name: "Task 2",
             description: "Description of task 2",
             estimatedTime: 3,
+            completed: false,
           },
         ]
       : [
@@ -28,6 +30,7 @@ const TaskLists: React.FC<TaskListsProps> = ({ type }) => {
             name: "Task 3",
             description: "Description of task 3",
             estimatedTime: 1,
+            completedTime: 2,
             completed: true,
           },
         ];

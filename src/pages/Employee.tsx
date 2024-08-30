@@ -1,9 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import EmployeeCard from "../components/EmployeePage/EmployeeCard";
 import AssignTaskButton from "../components/EmployeePage/AssignTaskButton";
 import TaskLists from "../components/EmployeePage/TaskLists";
 
 const EmployeePage: React.FC = () => {
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
   const employeeData = {
     name: "Akash Deep Chitransh",
     age: 21,
@@ -13,7 +14,14 @@ const EmployeePage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 4, p: 4 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: isSmallScreen ? "column" : "row",
+        gap: 4,
+        p: 4,
+      }}
+    >
       {/* Left Column: Employee Details */}
       <Box sx={{ flex: 1 }}>
         <Typography variant="h4" gutterBottom>

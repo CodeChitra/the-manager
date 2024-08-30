@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, ChangeEvent, useState } from "react";
 import {
   Box,
   Typography,
@@ -16,26 +16,27 @@ import {
   TableRow,
   Paper,
   Pagination,
+  useMediaQuery,
 } from "@mui/material";
 import ModalWrapper from "../components/ModalWrapper";
 import EmployeeForm from "../components/EmployeeForm";
 
 type SortFilterType = "experience" | "age";
 type SortOrderType = "asc" | "dsc";
-const Employees: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [sortField, setSortField] =
-    React.useState<SortFilterType>("experience");
-  const [sortOrder, setSortOrder] = React.useState<SortOrderType>("asc");
-  const [filterLocation, setFilterLocation] = React.useState("");
-  const [page, setPage] = React.useState(1);
+const Employees: FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<SortFilterType>("experience");
+  const [sortOrder, setSortOrder] = useState<SortOrderType>("asc");
+  const [filterLocation, setFilterLocation] = useState("");
+  const [page, setPage] = useState(1);
   const rowsPerPage = 10;
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleChangePage = (_: React.ChangeEvent<unknown>, newPage: number) => {
+  const handleChangePage = (_: ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
@@ -185,7 +186,13 @@ const Employees: React.FC = () => {
         }}
       >
         {/* Sorting Controls */}
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: isSmallScreen ? "column" : "row",
+            gap: 2,
+          }}
+        >
           <FormControl sx={{ minWidth: 120 }}>
             <InputLabel>Sort By</InputLabel>
             <Select

@@ -10,6 +10,7 @@ interface TaskCardProps {
     description: string;
     estimatedTime: number;
     completed?: boolean;
+    completedTime?: number;
   };
   completed?: boolean;
 }
@@ -25,6 +26,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, completed = false }) => {
         <Typography variant="body2">
           Estimated Time: {task.estimatedTime} days
         </Typography>
+        {completed && (
+          <Typography variant="body2">
+            Completed Time: {task.completedTime} days
+          </Typography>
+        )}
       </CardContent>
       <Button onClick={() => setModalOpen(true)}>
         {completed ? "Remove Task" : "Mark as Completed"}
