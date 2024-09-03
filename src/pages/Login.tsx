@@ -1,23 +1,39 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
+import useLogin from "../hooks/useLogin";
+import { useEffect } from "react";
+import { useAuthStore } from "../store";
+import { useNavigate } from "react-router-dom";
+
+const schema = z.object({
+  email: z
+    .string({ required_error: "Email is required!" })
+    .email("Please fill a valid email!"),
+  password: z.string({ required_error: "Password is required!" }),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({ resolver: zodResolver(schema) });
+  const loginMutation = useLogin();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    return loginMutation.mutate(data);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form Data:", formData);
-  };
+  const navigate = useNavigate();
+  const token = useAuthStore((store) => store.token);
+  useEffect(() => {
+    if (token) {
+      navigate("/employees");
+    }
+  }, [token, navigate]);
 
   return (
     <Container maxWidth="sm">
@@ -25,35 +41,42 @@ const Login = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Login
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             label="Email"
-            name="email"
             type="email"
-            value={formData.email}
-            onChange={handleChange}
             fullWidth
             margin="normal"
             required
+            {...register("email")}
           />
+          {errors.email && (
+            <Typography color="red" variant="body2">
+              {errors.email.message}
+            </Typography>
+          )}
           <TextField
             label="Password"
-            name="password"
             type="password"
-            value={formData.password}
-            onChange={handleChange}
             fullWidth
             margin="normal"
             required
+            {...register("password")}
           />
+          {errors.password && (
+            <Typography color="red" variant="body2">
+              {errors.password.message}
+            </Typography>
+          )}
           <Button
             type="submit"
             variant="contained"
             color="primary"
             fullWidth
             sx={{ mt: 3 }}
+            disabled={loginMutation.isPending}
           >
-            Login
+            {loginMutation.isPending ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Box>
