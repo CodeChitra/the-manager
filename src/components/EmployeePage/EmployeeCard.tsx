@@ -7,8 +7,8 @@ import {
   CardActions,
 } from "@mui/material";
 import ModalWrapper from "../ModalWrapper";
-import EmployeeForm from "../EmployeeForm";
 import ConfirmationModal from "./ConfirmationModal";
+import UpdateEmployeeForm from "../UpdateEmployeeForm";
 
 interface EmployeeCardProps {
   name: string;
@@ -27,7 +27,6 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
 }) => {
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-
   return (
     <Card>
       <CardContent>
@@ -50,7 +49,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         open={isUpdateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
       >
-        <EmployeeForm onSubmit={() => setUpdateModalOpen(false)} />
+        <UpdateEmployeeForm />
       </ModalWrapper>
 
       {/* Delete Confirmation Modal */}

@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store";
 
 const HomePage: React.FC = () => {
+  const token = useAuthStore((store) => store.token);
   const navigate = useNavigate();
 
   return (
@@ -26,22 +28,34 @@ const HomePage: React.FC = () => {
         Manage your team's information, tasks, and more with ease.
       </Typography>
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          size="large"
-          onClick={() => navigate("/register")}
-        >
-          Register
-        </Button>
+        {!token && [
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>,
+          <Button
+            variant="outlined"
+            color="primary"
+            size="large"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </Button>,
+        ]}
+        {token && (
+          <Button
+            variant="outlined"
+            color="primary"
+            size="large"
+            onClick={() => navigate("/employees")}
+          >
+            Get Started
+          </Button>
+        )}
       </Box>
     </Box>
   );

@@ -2,16 +2,20 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import EmployeeCard from "../components/EmployeePage/EmployeeCard";
 import AssignTaskButton from "../components/EmployeePage/AssignTaskButton";
 import TaskLists from "../components/EmployeePage/TaskLists";
+import useEmployeeDetail from "../hooks/useEmployeeDetail";
+import { useParams } from "react-router-dom";
 
 const EmployeePage: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
-  const employeeData = {
-    name: "Akash Deep Chitransh",
-    age: 21,
-    role: "Front-End Engineer",
-    experience: 2,
-    location: "Indore",
-  };
+  const { id = "" } = useParams();
+  const { data } = useEmployeeDetail(id);
+  // const employeeData = {
+  //   name: "Akash Deep Chitransh",
+  //   age: 21,
+  //   role: "Front-End Engineer",
+  //   experience: 2,
+  //   location: "Indore",
+  // };
 
   return (
     <Box
@@ -27,7 +31,7 @@ const EmployeePage: React.FC = () => {
         <Typography variant="h4" gutterBottom>
           Employee Details
         </Typography>
-        <EmployeeCard {...employeeData} />
+        <EmployeeCard {...data?.employeeDetail} />
       </Box>
 
       {/* Middle Column: Active Tasks */}

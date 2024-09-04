@@ -1,4 +1,5 @@
 import { FC, ChangeEvent, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Box,
   Typography,
@@ -19,12 +20,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ModalWrapper from "../components/ModalWrapper";
-import EmployeeForm from "../components/EmployeeForm";
+import axiosInstance from "../utils/axiosInstance";
+import CreateEmployeeForm from "../components/CreateEmployeeForm";
+import { useModalStore } from "../store";
+import { useNavigate } from "react-router-dom";
 
 type SortFilterType = "experience" | "age";
 type SortOrderType = "asc" | "dsc";
 const Employees: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortFilterType>("experience");
   const [sortOrder, setSortOrder] = useState<SortOrderType>("asc");
@@ -32,7 +35,8 @@ const Employees: FC = () => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const isSmallScreen = useMediaQuery("(max-width:600px)");
-
+  const { isModalOpen, setIsModalOpen } = useModalStore((store) => store);
+  const navigate = useNavigate();
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -40,127 +44,17 @@ const Employees: FC = () => {
     setPage(newPage);
   };
 
-  const handleCreateEmployee = () => {};
-
-  // Dummy employees data
-  const employees = [
-    {
-      id: 1,
-      name: "Akash Deep Chitransh",
-      age: 21,
-      role: "Developer",
-      experience: 2,
-      location: "Indore",
+  const { data } = useQuery({
+    queryKey: [
+      "employees",
+      { searchTerm, sortField, sortOrder, filterLocation, page },
+    ],
+    queryFn: async () => {
+      const url = `/employees?page=${page}&location=${filterLocation}&sortOrder=${sortOrder}&sortBy=${sortField}&search=${searchTerm}`;
+      const data = await axiosInstance.get(url);
+      return data;
     },
-    {
-      id: 2,
-      name: "Anushika Gupta",
-      age: 23,
-      role: "Designer",
-      experience: 2,
-      location: "Noida",
-    },
-    {
-      id: 3,
-      name: "Om Singh",
-      age: 35,
-      role: "Product Manager",
-      experience: 10,
-      location: "Noida",
-    },
-    {
-      id: 4,
-      name: "Ayush Badoni",
-      age: 40,
-      role: "QA Engineer",
-      experience: 8,
-      location: "hyderabad",
-    },
-    {
-      id: 5,
-      name: "Mayank Singh",
-      age: 25,
-      role: "Intern",
-      experience: 1,
-      location: "Indore",
-    },
-    {
-      id: 6,
-      name: "Kashish Shahu",
-      age: 32,
-      role: "DevOps Engineer",
-      experience: 7,
-      location: "Delhi",
-    },
-    {
-      id: 7,
-      name: "Sakshi Singh",
-      age: 29,
-      role: "Marketing Specialist",
-      experience: 4,
-      location: "Pune",
-    },
-    {
-      id: 8,
-      name: "Nancy Soni",
-      age: 37,
-      role: "Data Scientist",
-      experience: 6,
-      location: "Chennai",
-    },
-    {
-      id: 9,
-      name: "Grace Lee",
-      age: 26,
-      role: "UI/UX Designer",
-      experience: 2,
-      location: "New York",
-    },
-    {
-      id: 10,
-      name: "Hank Martin",
-      age: 45,
-      role: "CTO",
-      experience: 12,
-      location: "San Jose",
-    },
-    {
-      id: 11,
-      name: "John Doe",
-      age: 30,
-      role: "Developer",
-      experience: 5,
-      location: "New York",
-    },
-    {
-      id: 12,
-      name: "Jane Smith",
-      age: 28,
-      role: "Designer",
-      experience: 3,
-      location: "Los Angeles",
-    },
-  ];
-
-  // Filter and sort employees
-  const filteredEmployees = employees
-    .filter((emp) =>
-      emp.location.toLowerCase().includes(filterLocation.toLowerCase())
-    )
-    .filter((emp) => emp.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => {
-      const sortValue = sortOrder === "asc" ? 1 : -1;
-      if (sortField in a && sortField in b) {
-        return a[sortField] > b[sortField] ? sortValue : -sortValue;
-      }
-      return 0;
-    });
-
-  // Paginate employees
-  const paginatedEmployees = filteredEmployees.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
+  });
 
   return (
     <Box
@@ -212,7 +106,7 @@ const Employees: FC = () => {
               label="Order"
             >
               <MenuItem value="asc">Ascending</MenuItem>
-              <MenuItem value="desc">Descending</MenuItem>
+              <MenuItem value="dsc">Descending</MenuItem>
             </Select>
           </FormControl>
 
@@ -252,15 +146,28 @@ const Employees: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedEmployees.map((employee) => (
-                <TableRow key={employee.id}>
-                  <TableCell>{employee.name}</TableCell>
-                  <TableCell>{employee.age}</TableCell>
-                  <TableCell>{employee.role}</TableCell>
-                  <TableCell>{employee.experience}</TableCell>
-                  <TableCell>{employee.location}</TableCell>
-                </TableRow>
-              ))}
+              {data?.data.employees.map(
+                (employee: {
+                  _id: string;
+                  name: string;
+                  age: string;
+                  role: string;
+                  experience: number;
+                  location: string;
+                }) => (
+                  <TableRow
+                    key={employee._id}
+                    onClick={() => navigate(`/employees/${employee._id}`)}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <TableCell>{employee.name}</TableCell>
+                    <TableCell>{employee.age}</TableCell>
+                    <TableCell>{employee.role}</TableCell>
+                    <TableCell>{employee.experience}</TableCell>
+                    <TableCell>{employee.location}</TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -269,7 +176,7 @@ const Employees: FC = () => {
       {/* Pagination */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
         <Pagination
-          count={Math.ceil(filteredEmployees.length / rowsPerPage)}
+          count={Math.ceil(data?.data.totalEmployees / rowsPerPage)}
           page={page}
           onChange={handleChangePage}
           color="primary"
@@ -281,7 +188,7 @@ const Employees: FC = () => {
         onClose={handleCloseModal}
         title="Create Employee"
       >
-        <EmployeeForm onSubmit={handleCreateEmployee} />
+        <CreateEmployeeForm />
       </ModalWrapper>
     </Box>
   );

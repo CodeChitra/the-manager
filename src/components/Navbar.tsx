@@ -20,6 +20,7 @@ const Navbar = () => {
         <Box>
           {!token && [
             <Link
+              key={1}
               to="/register"
               style={{
                 textDecoration: "none",
@@ -30,6 +31,7 @@ const Navbar = () => {
               Register
             </Link>,
             <Link
+              key={2}
               to="/login"
               style={{
                 textDecoration: "none",
@@ -43,6 +45,7 @@ const Navbar = () => {
 
           {token && [
             <Link
+              key={3}
               to="/"
               style={{
                 textDecoration: "none",
@@ -53,6 +56,7 @@ const Navbar = () => {
               Home
             </Link>,
             <Link
+              key={4}
               to="/employees"
               style={{
                 textDecoration: "none",
@@ -61,16 +65,6 @@ const Navbar = () => {
               }}
             >
               Employees
-            </Link>,
-            <Link
-              to="/employees/1"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                margin: "0 15px",
-              }}
-            >
-              EmployeeDetail
             </Link>,
             <Button onClick={handleLogout} variant="contained">
               Logout
