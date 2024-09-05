@@ -55,7 +55,6 @@ const Employees: FC = () => {
       return data;
     },
   });
-
   return (
     <Box
       sx={{
@@ -175,12 +174,14 @@ const Employees: FC = () => {
 
       {/* Pagination */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-        <Pagination
-          count={Math.ceil(data?.data.totalEmployees / rowsPerPage)}
-          page={page}
-          onChange={handleChangePage}
-          color="primary"
-        />
+        {data?.data.totalEmployees && (
+          <Pagination
+            count={Math.ceil(data?.data.totalEmployees / rowsPerPage)}
+            page={page}
+            onChange={handleChangePage}
+            color="primary"
+          />
+        )}
       </Box>
 
       <ModalWrapper

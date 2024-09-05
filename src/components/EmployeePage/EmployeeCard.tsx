@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Typography,
   Button,
@@ -9,6 +9,9 @@ import {
 import ModalWrapper from "../ModalWrapper";
 import ConfirmationModal from "./ConfirmationModal";
 import UpdateEmployeeForm from "../UpdateEmployeeForm";
+import { useModalStore } from "../../store";
+import { useParams } from "react-router-dom";
+import useDeleteEmployee from "../../hooks/useDeleteEmployee";
 
 interface EmployeeCardProps {
   name: string;
@@ -25,8 +28,17 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   experience,
   location,
 }) => {
-  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const {
+    isUpdateEmployeeModalOpen,
+    setIsUpdateEmployeeModalOpen,
+    isDeleteEmployeeModalOpen,
+    setIsDeleteEmployeeModalOpen,
+  } = useModalStore((store) => store);
+  const { id = "" } = useParams();
+  const deleteEmployeeMutation = useDeleteEmployee();
+  const handleDeleteEmployee = () => {
+    deleteEmployeeMutation.mutate(id);
+  };
   return (
     <Card>
       <CardContent>
@@ -37,8 +49,13 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         <Typography variant="body2">Location: {location}</Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={() => setUpdateModalOpen(true)}>Update</Button>
-        <Button color="error" onClick={() => setDeleteModalOpen(true)}>
+        <Button onClick={() => setIsUpdateEmployeeModalOpen(true)}>
+          Update
+        </Button>
+        <Button
+          color="error"
+          onClick={() => setIsDeleteEmployeeModalOpen(true)}
+        >
           Delete
         </Button>
       </CardActions>
@@ -46,20 +63,17 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       {/* Update Modal */}
       <ModalWrapper
         title="Update Employee Details"
-        open={isUpdateModalOpen}
-        onClose={() => setUpdateModalOpen(false)}
+        open={isUpdateEmployeeModalOpen}
+        onClose={() => setIsUpdateEmployeeModalOpen(false)}
       >
         <UpdateEmployeeForm />
       </ModalWrapper>
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModal
-        open={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={() => {
-          // Handle delete logic
-          setDeleteModalOpen(false);
-        }}
+        open={isDeleteEmployeeModalOpen}
+        onClose={() => setIsDeleteEmployeeModalOpen(false)}
+        onConfirm={handleDeleteEmployee}
         title="Are you sure?"
         message="Do you really want to delete this employee?"
       />

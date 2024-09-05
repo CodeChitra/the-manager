@@ -66,7 +66,7 @@ const Navbar = () => {
             >
               Employees
             </Link>,
-            <Button onClick={handleLogout} variant="contained">
+            <Button onClick={handleLogout} variant="contained" key={5}>
               Logout
             </Button>,
           ]}

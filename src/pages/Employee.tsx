@@ -9,14 +9,6 @@ const EmployeePage: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const { id = "" } = useParams();
   const { data } = useEmployeeDetail(id);
-  // const employeeData = {
-  //   name: "Akash Deep Chitransh",
-  //   age: 21,
-  //   role: "Front-End Engineer",
-  //   experience: 2,
-  //   location: "Indore",
-  // };
-
   return (
     <Box
       sx={{

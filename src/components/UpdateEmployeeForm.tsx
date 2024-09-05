@@ -3,6 +3,7 @@ import EmployeeForm, { Inputs } from "./EmployeeForm";
 import { SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import useEmployeeDetail from "../hooks/useEmployeeDetail";
+import useUpdateEmployee from "../hooks/useUpdateEmployee";
 
 const UpdateEmployeeForm: FC = () => {
   const { id = "" } = useParams();
@@ -14,13 +15,14 @@ const UpdateEmployeeForm: FC = () => {
     experience: data?.employeeDetail.experience,
     location: data?.employeeDetail.location,
   };
+  const updateEmployeeMutation = useUpdateEmployee();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    updateEmployeeMutation.mutate({ data, id });
   };
   return (
     <EmployeeForm
       onSubmit={onSubmit}
-      isPending={false}
+      isPending={updateEmployeeMutation.isPending}
       prefetchedFormData={prefetchedFormData}
     />
   );

@@ -6,8 +6,14 @@ type AuthStore = {
 };
 
 type ModalStore = {
-  isModalOpen: boolean;
-  setIsModalOpen: (value: boolean) => void;
+  isCreateEmployeeModalOpen: boolean;
+  isUpdateEmployeeModalOpen: boolean;
+  isDeleteEmployeeModalOpen: boolean;
+  isCreateTaskModalOpen: boolean;
+  setIsCreateEmployeeModalOpen: (value: boolean) => void;
+  setIsUpdateEmployeeModalOpen: (value: boolean) => void;
+  setIsDeleteEmployeeModalOpen: (value: boolean) => void;
+  setIsCreateTaskModalOpen: (value: boolean) => void;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -18,8 +24,20 @@ export const useAuthStore = create<AuthStore>((set) => ({
 }));
 
 export const useModalStore = create<ModalStore>((set) => ({
-  isModalOpen: false,
-  setIsModalOpen: (value: boolean) => {
-    set({ isModalOpen: value });
+  isCreateEmployeeModalOpen: false,
+  setIsCreateEmployeeModalOpen: (value: boolean) => {
+    set({ isCreateEmployeeModalOpen: value });
+  },
+  isUpdateEmployeeModalOpen: false,
+  setIsUpdateEmployeeModalOpen: (value: boolean) => {
+    set({ isUpdateEmployeeModalOpen: value });
+  },
+  isDeleteEmployeeModalOpen: false,
+  setIsDeleteEmployeeModalOpen: (value: boolean) => {
+    set({ isDeleteEmployeeModalOpen: value });
+  },
+  isCreateTaskModalOpen: false,
+  setIsCreateTaskModalOpen: (value: boolean) => {
+    set({ isCreateTaskModalOpen: value });
   },
 }));

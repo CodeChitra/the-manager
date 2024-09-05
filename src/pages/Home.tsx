@@ -30,6 +30,7 @@ const HomePage: React.FC = () => {
       <Box sx={{ display: "flex", gap: 2 }}>
         {!token && [
           <Button
+            key={1}
             variant="contained"
             color="primary"
             size="large"
@@ -38,6 +39,7 @@ const HomePage: React.FC = () => {
             Login
           </Button>,
           <Button
+            key={2}
             variant="outlined"
             color="primary"
             size="large"
