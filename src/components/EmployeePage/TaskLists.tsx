@@ -1,45 +1,25 @@
-import { Box } from "@mui/material";
-import TaskCard from "./TaskCard";
+import { Box, Typography } from "@mui/material";
+import { Task } from "../../pages/Employee";
+import CompletedTaskCard from "./CompletedTaskCard";
+import ActiveTaskCard from "./ActiveTaskCard";
 
 interface TaskListsProps {
   type: "active" | "completed";
+  tasks: Task[];
 }
 
-const TaskLists: React.FC<TaskListsProps> = ({ type }) => {
-  const tasks =
-    type === "active"
-      ? [
-          {
-            id: 1,
-            name: "Task 1",
-            description: "Description of task 1",
-            estimatedTime: 2,
-            completed: false,
-          },
-          {
-            id: 2,
-            name: "Task 2",
-            description: "Description of task 2",
-            estimatedTime: 3,
-            completed: false,
-          },
-        ]
-      : [
-          {
-            id: 3,
-            name: "Task 3",
-            description: "Description of task 3",
-            estimatedTime: 1,
-            completedTime: 2,
-            completed: true,
-          },
-        ];
-
+const TaskLists: React.FC<TaskListsProps> = ({ type, tasks }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} completed={type === "completed"} />
-      ))}
+      {tasks.length > 0 &&
+        tasks.map((task) =>
+          type === "completed" ? (
+            <CompletedTaskCard key={task._id} task={task} />
+          ) : (
+            <ActiveTaskCard key={task._id} task={task} />
+          )
+        )}
+      {tasks.length === 0 && <Typography>No {type} tasks found.</Typography>}
     </Box>
   );
 };

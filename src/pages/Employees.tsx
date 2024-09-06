@@ -24,6 +24,7 @@ import axiosInstance from "../utils/axiosInstance";
 import CreateEmployeeForm from "../components/CreateEmployeeForm";
 import { useModalStore } from "../store";
 import { useNavigate } from "react-router-dom";
+import { capitalizeFirstLetter } from "../utils/helpers";
 
 type SortFilterType = "experience" | "age";
 type SortOrderType = "asc" | "dsc";
@@ -35,10 +36,15 @@ const Employees: FC = () => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const isSmallScreen = useMediaQuery("(max-width:600px)");
-  const { isModalOpen, setIsModalOpen } = useModalStore((store) => store);
+  const isCreateEmployeeModalOpen = useModalStore(
+    (store) => store.isCreateEmployeeModalOpen
+  );
+  const setIsCreateEmployeeModalOpen = useModalStore(
+    (store) => store.setIsCreateEmployeeModalOpen
+  );
   const navigate = useNavigate();
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenModal = () => setIsCreateEmployeeModalOpen(true);
+  const handleCloseModal = () => setIsCreateEmployeeModalOpen(false);
 
   const handleChangePage = (_: ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -159,11 +165,17 @@ const Employees: FC = () => {
                     onClick={() => navigate(`/employees/${employee._id}`)}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell>{employee.name}</TableCell>
+                    <TableCell>
+                      {capitalizeFirstLetter(employee.name)}
+                    </TableCell>
                     <TableCell>{employee.age}</TableCell>
-                    <TableCell>{employee.role}</TableCell>
+                    <TableCell>
+                      {capitalizeFirstLetter(employee.role)}
+                    </TableCell>
                     <TableCell>{employee.experience}</TableCell>
-                    <TableCell>{employee.location}</TableCell>
+                    <TableCell>
+                      {capitalizeFirstLetter(employee.location)}
+                    </TableCell>
                   </TableRow>
                 )
               )}
@@ -185,7 +197,7 @@ const Employees: FC = () => {
       </Box>
 
       <ModalWrapper
-        open={isModalOpen}
+        open={isCreateEmployeeModalOpen}
         onClose={handleCloseModal}
         title="Create Employee"
       >

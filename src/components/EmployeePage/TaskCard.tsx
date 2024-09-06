@@ -1,28 +1,31 @@
 // src/components/EmployeePage/TaskCard.tsx
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import ConfirmationModal from "./ConfirmationModal";
-
+import { Task } from "../../pages/Employee";
+import { capitalizeFirstLetter } from "../../utils/helpers";
 interface TaskCardProps {
-  task: {
-    id: number;
-    name: string;
-    description: string;
-    estimatedTime: number;
-    completed?: boolean;
-    completedTime?: number;
-  };
+  task: Task;
   completed?: boolean;
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+  onConfirm: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, completed = false }) => {
-  const [isModalOpen, setModalOpen] = useState(false);
-
+const TaskCard: React.FC<TaskCardProps> = ({
+  task,
+  completed = false,
+  isModalOpen,
+  setIsModalOpen,
+  onConfirm,
+}) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">{task.name}</Typography>
-        <Typography variant="body2">{task.description}</Typography>
+        <Typography variant="h6">{capitalizeFirstLetter(task.name)}</Typography>
+        <Typography variant="body2">
+          {capitalizeFirstLetter(task.description)}
+        </Typography>
         <Typography variant="body2">
           Estimated Time: {task.estimatedTime} days
         </Typography>
@@ -32,17 +35,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, completed = false }) => {
           </Typography>
         )}
       </CardContent>
-      <Button onClick={() => setModalOpen(true)}>
+      <Button onClick={() => setIsModalOpen(true)}>
         {completed ? "Remove Task" : "Mark as Completed"}
       </Button>
 
       <ConfirmationModal
         open={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={() => {
-          // Handle task completion or removal logic
-          setModalOpen(false);
-        }}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={onConfirm}
         title={completed ? "Remove Task" : "Mark Task as Completed"}
         message={
           completed

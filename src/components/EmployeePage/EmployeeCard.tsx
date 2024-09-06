@@ -12,6 +12,7 @@ import UpdateEmployeeForm from "../UpdateEmployeeForm";
 import { useModalStore } from "../../store";
 import { useParams } from "react-router-dom";
 import useDeleteEmployee from "../../hooks/useDeleteEmployee";
+import { capitalizeFirstLetter } from "../../utils/helpers";
 
 interface EmployeeCardProps {
   name: string;
@@ -42,11 +43,15 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">{name}</Typography>
+        <Typography variant="h6">{capitalizeFirstLetter(name)}</Typography>
         <Typography variant="body2">Age: {age}</Typography>
-        <Typography variant="body2">Role: {role}</Typography>
+        <Typography variant="body2">
+          Role: {capitalizeFirstLetter(role)}
+        </Typography>
         <Typography variant="body2">Experience: {experience} years</Typography>
-        <Typography variant="body2">Location: {location}</Typography>
+        <Typography variant="body2">
+          Location: {capitalizeFirstLetter(location)}
+        </Typography>
       </CardContent>
       <CardActions>
         <Button onClick={() => setIsUpdateEmployeeModalOpen(true)}>
